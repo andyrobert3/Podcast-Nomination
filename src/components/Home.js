@@ -4,6 +4,7 @@ import { logout } from "../actions";
 import { withStyles } from "@material-ui/styles";
 
 import SearchBar from './Search';
+import PodcastCard from './Card';
 
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
@@ -41,8 +42,8 @@ class Home extends Component {
 
     return (
       <div>
-        <SearchBar></SearchBar>
-      
+        <SearchBar onClick={this.handleLogout}></SearchBar>
+        <PodcastCard></PodcastCard>
         <h1>This is your app's protected area.</h1>
         <p>Any routes here will also be protected</p>
         <button onClick={this.handleLogout}>Logout</button>
