@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
     },
     paper: {
       padding: theme.spacing(2),
-      margin: 'auto',
+      margin: '20px auto',
       maxWidth: 500,
     },
     image: {
@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
     },
   }));
 
-export default function PodcastCard() {
+export default function PodcastCard(props) {
     const classes = useStyles();
 
     return (

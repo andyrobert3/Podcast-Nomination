@@ -15,7 +15,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import LockIcon from '@material-ui/icons/Lock';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import { Icon } from '@material-ui/core';
+import { Icon, Input } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     grow: {
@@ -185,14 +185,19 @@ export default function SearchBar(props) {
                         <div className={classes.searchIcon}>
                             <SearchIcon />
                         </div>
-                        <InputBase
-                            placeholder="Search podcasts"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput
-                            }}
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
+                        <form onSubmit={props.onClick}>
+                            <Input
+                                type='text'
+                                id='search'
+                                placeholder="Search podcasts"
+                                classes={{
+                                    root: classes.inputRoot,
+                                    input: classes.inputInput
+                                }}
+                                inputProps={{ 'aria-label': 'search' }}
+                            />
+                        </form>
+                        
                     </div>
                     <div className={classes.grow}/>
                     <div className={classes.sectionDesktop}>
@@ -202,7 +207,7 @@ export default function SearchBar(props) {
                             </Badge>
                         </IconButton>
                         
-                        <IconButton aria-label="show 8 new notifications" color="inherit" onClick={props.onClick}>
+                        <IconButton aria-label="show 8 new notifications" color="inherit" onClick={props.logout}>
                             <Badge badgeContent={8} color="secondary">
                                 <LockIcon/>
                             </Badge>
