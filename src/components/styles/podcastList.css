@@ -1,0 +1,5 @@
+.PodcastList {
+    border: thin solid blue;
+    display: flex;
+    flex-direction: column;
+}
