@@ -4,6 +4,7 @@ import { logout } from "../actions";
 import { withStyles } from "@material-ui/styles";
 
 import SearchBar from './Search';
+import PodcastList from './PodcastList';
 import PodcastCard from './Card';
 
 import Paper from '@material-ui/core/Paper';
@@ -30,7 +31,46 @@ import SearchIcon from '@material-ui/icons/Search';
 //   }
 // });
 
+
 class Home extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      podcastCardList: []
+    };
+
+
+  };
+
+  generateApiLink = (query, type = 'type') => {
+    return `https://listen-api.listennotes.com/api/v2/search?q=${query}&sort_by_date=0&type=${type}&len_min=0&published_before=1390190241000&published_after=0&language=English&safe_mode=1`
+  }
+
+  fetchPodcastDetails = async event => {
+    event.preventDefault();
+    console.log(event.target.search.value);
+
+    let apiLink = this.generateApiLink(event.target.search.value, null);
+
+    let response = await fetch(apiLink, {
+      headers: {
+        'X-ListenAPI-Key': 'd1fed3045bba47f39ef7b306465dfa15'
+      },
+      method: 'GET'
+    });
+
+    if (response.ok) {
+      let data = await response.json();
+
+      this.setState({
+        podcastCardList: data.results
+      });
+    } else {
+      alert("HTTP-Error: " + response.status); 
+    }
+  };
+ 
 
   handleLogout = () => {
     const { dispatch } = this.props;
@@ -42,8 +82,9 @@ class Home extends Component {
 
     return (
       <div>
-        <SearchBar onClick={this.handleLogout}></SearchBar>
-        <PodcastCard></PodcastCard>
+        <SearchBar logout={this.handleLogout} onClick={this.fetchPodcastDetails}/>
+        <PodcastList podcastCardList={this.state.podcastCardList}></PodcastList>
+        
         <h1>This is your app's protected area.</h1>
         <p>Any routes here will also be protected</p>
         <button onClick={this.handleLogout}>Logout</button>
