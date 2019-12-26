@@ -15,6 +15,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import LockIcon from '@material-ui/icons/Lock';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import Tooltip from '@material-ui/core/Tooltip'
 import { Icon, Input } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -200,18 +201,12 @@ export default function SearchBar(props) {
                         
                     </div>
                     <div className={classes.grow}/>
-                    <div className={classes.sectionDesktop}>
-                        <IconButton aria-label="show 3 new mails" color="inherit">
-                            <Badge badgeContent={3} color="secondary">
-                                <MailIcon/>
-                            </Badge>
-                        </IconButton>
-                        
-                        <IconButton aria-label="show 8 new notifications" color="inherit" onClick={props.logout}>
-                            <Badge badgeContent={8} color="secondary">
+                    <div className={classes.sectionDesktop}>        
+                        <Tooltip title="Logout" aria-label="logout">
+                            <IconButton aria-label="show 8 new notifications" color="inherit" onClick={props.logout}>
                                 <LockIcon/>
-                            </Badge>
-                        </IconButton>
+                            </IconButton>
+                        </Tooltip>
 
                         <IconButton
                             edge="end"

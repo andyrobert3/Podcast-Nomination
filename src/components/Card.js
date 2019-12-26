@@ -36,25 +36,25 @@ export default function PodcastCard(props) {
                 <Grid container spacing={2}>
                     <Grid item>
                         <ButtonBase className={classes.image}>
-                            <img className={classes.img} alt="podcast"/>
+                            <img className={classes.img} alt="podcast" src={props.thumbnail}/>
                         </ButtonBase>
                     </Grid>
                     <Grid item xs={12} sm container>
                         <Grid item xs container direction="column" spacing={2}>
                             <Grid item xs>
                                 <Typography gutterBottom variant="subtitle1">
-                                    Podcast Name
+                                    {props.title_original}
                                 </Typography>
                                 <Typography variant="body2" gutterBottom>
-                                    Podcast Artist
+                                    {props.publisher_original}
                                 </Typography>
                                 <Typography variant="body2" color="textSecondary">
-                                    Likes
+                                    {props.description_highlighted}
                                 </Typography>
                             </Grid>
                             <Grid item>
                                 <Typography variant="body2" style={{ cursor: 'pointer' }}>
-                                    Like
+                                    <a href={props.listennotes_url} target="_blank" rel="noopener noreferrer">Know more</a>
                                 </Typography>
                             </Grid>
                             <Grid item>
