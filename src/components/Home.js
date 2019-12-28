@@ -1,18 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { logout } from "../actions";
+import { logout, getPodcastDetails } from "../actions";
+
 import { withStyles } from "@material-ui/styles";
 
 import SearchBar from './Search';
 import PodcastList from './PodcastList';
-import PodcastCard from './Card';
 
-import Paper from '@material-ui/core/Paper';
-import InputBase from '@material-ui/core/InputBase';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-
+import isEmpty from '../utils/util';
 
 // const styles = () => ({
 //   root: {
@@ -45,11 +40,20 @@ class Home extends Component {
 
   generateApiLink = (query, type = 'type') => {
     return `https://listen-api.listennotes.com/api/v2/search?q=${query}&sort_by_date=0&type=${type}&len_min=0&published_before=1390190241000&published_after=0&language=English&safe_mode=1`
-  }
+  };
+
+  getLikesFromDb = async id => {
+    let podcastDetails = await getPodcastDetails(id);
+    
+    if (isEmpty(podcastDetails)) {
+      return 0;
+    } else {
+      return podcastDetails.likes;
+    }
+  };
 
   fetchPodcastDetails = async event => {
     event.preventDefault();
-    console.log(event.target.search.value);
 
     let apiLink = this.generateApiLink(event.target.search.value, null);
 
@@ -63,9 +67,21 @@ class Home extends Component {
     if (response.ok) {
       let data = await response.json();
 
+      // check likes in database
+      // add likes to data.results for each
+      let podcastCardList = [];
+
+      await Promise.all(
+        data.results.map(async (val, idx) => {
+          val.likes = await this.getLikesFromDb(val.id);
+          podcastCardList.push(val);
+        })
+      );
+      console.log(podcastCardList);
       this.setState({
-        podcastCardList: data.results
+        podcastCardList: podcastCardList
       });
+
     } else {
       alert("HTTP-Error: " + response.status); 
     }

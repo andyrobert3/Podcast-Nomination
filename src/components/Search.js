@@ -113,7 +113,7 @@ export default function SearchBar(props) {
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             id={menuId}
             keepMounted
-            transformOrigin={{ vertical: 'top', horizonal: 'right' }}
+            // transformOrigin={{ vertical: 'top', horizonal: 'right' }}
             open={isMenuOpen}
             onClose={handleMenuClose}
         >

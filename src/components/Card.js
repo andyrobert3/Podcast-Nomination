@@ -49,7 +49,7 @@ export default function PodcastCard(props) {
                                     {props.publisher_original}
                                 </Typography>
                                 <Typography variant="body2" color="textSecondary">
-                                    {props.description_highlighted}
+                                    {props.description_highlighted.length}
                                 </Typography>
                             </Grid>
                             <Grid item>
@@ -58,7 +58,7 @@ export default function PodcastCard(props) {
                                 </Typography>
                             </Grid>
                             <Grid item>
-                                <Typography variant="subtitle1">19 Likes</Typography>
+                                <Typography variant="subtitle1">{props.likes}</Typography>
                             </Grid>
                         </Grid>
                     </Grid>
