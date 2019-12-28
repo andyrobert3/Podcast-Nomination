@@ -52,6 +52,8 @@ class Home extends Component {
     }
   };
 
+  
+
   fetchPodcastDetails = async event => {
     event.preventDefault();
 
@@ -77,7 +79,7 @@ class Home extends Component {
           podcastCardList.push(val);
         })
       );
-      console.log(podcastCardList);
+
       this.setState({
         podcastCardList: podcastCardList
       });
