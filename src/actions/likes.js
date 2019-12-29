@@ -63,9 +63,8 @@ export async function checkPodcastExists(podcastId) {
 
 export async function registerVote(userId, podcastId) {
     const hasVoted = await checkVote(userId, podcastId);
-    console.log(hasVoted)
-    if (hasVoted) {
-        
+
+    if (hasVoted) {    
         return {
             valid: false
         };
@@ -73,7 +72,6 @@ export async function registerVote(userId, podcastId) {
         // vote 
         const podcastsExists = await checkPodcastExists(podcastId);
         if (!podcastsExists) {
-            console.log("doesnt exist")
             await createCounter(podcastsRef.doc(podcastId), NUM_SHARDS);
         }
 

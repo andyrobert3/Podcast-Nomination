@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -33,8 +33,11 @@ const useStyles = makeStyles(theme => ({
     }
   }));
 
+
 export default function PodcastCard(props) {
     const classes = useStyles();
+    const [voted, setVoteState] = useState(props.voted);
+    const [likes, setLikes] = useState(props.likes);
 
     return (
         <div className={classes.root}>
@@ -64,10 +67,14 @@ export default function PodcastCard(props) {
                                 </Typography>
                             </Grid>
                             <Grid classes={classes.likes}>
-                                <Fab color="secondary" disabled={false} onClick={() => props.onVote(props.id)} aria-label="like">
+                                <Fab color="secondary" disabled={voted} onClick={() => {
+                                    props.onVote(props.id);
+                                    setVoteState(!voted);
+                                    setLikes(likes => likes + 1);
+                                }} aria-label="like">
                                     <FavoriteIcon />
                                 </Fab>
-                                <Typography variant="subtitle1">{props.likes} Likes</Typography>
+                                <Typography variant="subtitle1">{likes} Likes</Typography>
                             </Grid>
                             
                         </Grid>

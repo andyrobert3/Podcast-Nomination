@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { logout, getVotes, getUserLoginDetails, registerVote } from "../actions";
+import { logout, getVotes, getUserLoginDetails, registerVote, checkVote } from "../actions";
 
 import { withStyles } from "@material-ui/styles";
 
@@ -53,6 +53,15 @@ class Home extends Component {
 
   };
 
+  hasVoted = (podcastId) => {
+    const userDetails = getUserLoginDetails();
+    if (userDetails === null) {
+
+    } else {
+      return checkVote(userDetails.uid, podcastId);
+    }
+  }
+
   vote = (podcastId) => {
     const userDetails = getUserLoginDetails();
     if (userDetails === null) {
@@ -84,10 +93,12 @@ class Home extends Component {
       await Promise.all(
         data.results.map(async (val, idx) => {
           val.likes = await getVotes(val.id);
+          val.voted = await this.hasVoted(val.id);
+
           podcastCardList.push(val);
         })
       );
-
+      console.log(podcastCardList)
       this.setState({
         podcastCardList: podcastCardList
       });
