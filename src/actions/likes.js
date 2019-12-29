@@ -2,7 +2,7 @@ import { db } from '../firebase/firebase';
 import isEmpty from '../utils/util';
 import firebase from "firebase/app";
 
-const NUM_SHARDS = 10;
+const NUM_SHARDS = 5;
 
 const podcastsRef = db.collection("podcasts");
 const usersVotesRef = db.collection("UsersVotes");
@@ -23,9 +23,9 @@ const createCounter = (ref, num_shards) => {
     return batch.commit();
 }
 
-function incrementCounter(ref, num_shards) {
+function incrementCounter(ref) {
     // Select a shard of the counter at random
-    const shard_id = Math.floor(Math.random() * num_shards).toString();
+    const shard_id = Math.floor(Math.random() * NUM_SHARDS).toString();
     const shard_ref = ref.collection('shards').doc(shard_id);
 
     // Update count
@@ -44,9 +44,49 @@ function getCount(ref) {
     });
 }
 
-// function registerVote() {
-//     return usersVotesRef.
-// }
+export async function getVotes(podcastId) {
+    return await getCount(podcastsRef.doc(podcastId));
+}
+
+export async function checkVote(userId, podcastId) {
+    let doc = await usersVotesRef.where("userId", "==", userId)
+        .where("podcastId", "==", podcastId).get();
+
+    return doc.exists;
+}
+
+export async function checkPodcastExists(podcastId) {
+    let doc = await podcastsRef.doc(podcastId);
+
+    return doc.exists
+}
+
+export async function registerVote(userId, podcastId) {
+    const hasVoted = await checkVote(userId, podcastId);
+    
+    if (hasVoted) {
+        // invalid vote
+        return {
+            valid: false
+        };
+    } else {
+        // vote 
+        if (!checkPodcastExists(podcastId)) {
+            createCounter(podcastsRef.doc(podcastId), NUM_SHARDS);
+        }
+
+        await usersVotesRef.add({
+            userId: userId,
+            podcastId: podcastId
+        });
+
+        await incrementCounter(podcastsRef.doc(podcastId));
+
+        return {
+            valid: true
+        }
+    }
+}
 
 // function create
 

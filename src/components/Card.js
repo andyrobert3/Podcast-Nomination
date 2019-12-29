@@ -49,16 +49,16 @@ export default function PodcastCard(props) {
                                     {props.publisher_original}
                                 </Typography>
                                 <Typography variant="body2" color="textSecondary">
-                                    {props.description_highlighted.length}
+                                    {props.description_highlighted}
                                 </Typography>
                             </Grid>
                             <Grid item>
                                 <Typography variant="body2" style={{ cursor: 'pointer' }}>
-                                    <a href={props.listennotes_url} target="_blank" rel="noopener noreferrer">Know more</a>
+                                    <a href={props.listennotes_url} target="_blank" rel="noopener noreferrer">Read more</a>
                                 </Typography>
                             </Grid>
                             <Grid item>
-                                <Typography variant="subtitle1">{props.likes}</Typography>
+                                <Typography variant="subtitle1">{props.likes} Likes</Typography>
                             </Grid>
                         </Grid>
                     </Grid>

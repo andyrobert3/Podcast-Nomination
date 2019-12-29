@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { logout, getPodcastDetails } from "../actions";
+import { logout, getVotes } from "../actions";
 
 import { withStyles } from "@material-ui/styles";
 
@@ -43,16 +43,17 @@ class Home extends Component {
   };
 
   getLikesFromDb = async id => {
-    let podcastDetails = await getPodcastDetails(id);
+    // let podcastDetails = await getPodcastDetails(id);
     
-    if (isEmpty(podcastDetails)) {
-      return 0;
-    } else {
-      return podcastDetails.likes;
-    }
+    // if (isEmpty(podcastDetails)) {
+    //   return 0;
+    // } else {
+    //   return podcastDetails.likes;
+    // }
+
   };
 
-  
+
 
   fetchPodcastDetails = async event => {
     event.preventDefault();
@@ -75,7 +76,7 @@ class Home extends Component {
 
       await Promise.all(
         data.results.map(async (val, idx) => {
-          val.likes = await this.getLikesFromDb(val.id);
+          val.likes = await getVotes(val.id);
           podcastCardList.push(val);
         })
       );
