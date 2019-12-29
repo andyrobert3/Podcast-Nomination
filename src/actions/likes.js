@@ -52,20 +52,20 @@ export async function checkVote(userId, podcastId) {
     let doc = await usersVotesRef.where("userId", "==", userId)
         .where("podcastId", "==", podcastId).get();
 
-    return doc.exists;
+    return !doc.empty;
 }
 
 export async function checkPodcastExists(podcastId) {
-    let doc = await podcastsRef.doc(podcastId);
+    let doc = await podcastsRef.doc(podcastId).get();
 
     return doc.exists
 }
 
 export async function registerVote(userId, podcastId) {
     const hasVoted = await checkVote(userId, podcastId);
-    
+    console.log(hasVoted)
     if (hasVoted) {
-        // invalid vote
+        
         return {
             valid: false
         };
@@ -76,7 +76,6 @@ export async function registerVote(userId, podcastId) {
             console.log("doesnt exist")
             await createCounter(podcastsRef.doc(podcastId), NUM_SHARDS);
         }
-        console.log("BAhlo")
 
         await usersVotesRef.add({
             userId: userId,
