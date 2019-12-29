@@ -71,9 +71,12 @@ export async function registerVote(userId, podcastId) {
         };
     } else {
         // vote 
-        if (!checkPodcastExists(podcastId)) {
-            createCounter(podcastsRef.doc(podcastId), NUM_SHARDS);
+        const podcastsExists = await checkPodcastExists(podcastId);
+        if (!podcastsExists) {
+            console.log("doesnt exist")
+            await createCounter(podcastsRef.doc(podcastId), NUM_SHARDS);
         }
+        console.log("BAhlo")
 
         await usersVotesRef.add({
             userId: userId,

@@ -68,6 +68,15 @@ const verifyRequest = () => {
  * public functions for auth 
  */
 
+export const getUserLoginDetails = () => {
+    const user = myFirebase.auth().currentUser;
+    if (user) {
+        return user;
+    } else {
+        return null;
+    }
+}
+
 export const login = (email, password) => dispatch => {
     dispatch(requestLogin());
    

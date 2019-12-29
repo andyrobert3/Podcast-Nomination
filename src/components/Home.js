@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { logout, getVotes } from "../actions";
+import { logout, getVotes, getUserLoginDetails, registerVote } from "../actions";
 
 import { withStyles } from "@material-ui/styles";
 
@@ -53,7 +53,14 @@ class Home extends Component {
 
   };
 
+  vote = (podcastId) => {
+    const userDetails = getUserLoginDetails();
+    if (userDetails === null) {
 
+    } else {
+      return registerVote(userDetails.uid, podcastId);
+    }
+  }
 
   fetchPodcastDetails = async event => {
     event.preventDefault();
@@ -102,7 +109,7 @@ class Home extends Component {
     return (
       <div>
         <SearchBar logout={this.handleLogout} onClick={this.fetchPodcastDetails}/>
-        <PodcastList podcastCardList={this.state.podcastCardList}></PodcastList>
+        <PodcastList podcastCardList={this.state.podcastCardList} onVote={this.vote}></PodcastList>
       </div>
     );
   }

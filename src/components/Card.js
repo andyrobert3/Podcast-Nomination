@@ -3,6 +3,8 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Fab from '@material-ui/core/Fab';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 
@@ -25,6 +27,10 @@ const useStyles = makeStyles(theme => ({
       maxWidth: '100%',
       maxHeight: '100%',
     },
+    likes: {
+        display: "flex",
+        flexDirection: "row"
+    }
   }));
 
 export default function PodcastCard(props) {
@@ -57,9 +63,13 @@ export default function PodcastCard(props) {
                                     <a href={props.listennotes_url} target="_blank" rel="noopener noreferrer">Read more</a>
                                 </Typography>
                             </Grid>
-                            <Grid item>
+                            <Grid classes={classes.likes}>
+                                <Fab color="secondary" disabled={false} onClick={() => props.onVote(props.id)} aria-label="like">
+                                    <FavoriteIcon />
+                                </Fab>
                                 <Typography variant="subtitle1">{props.likes} Likes</Typography>
                             </Grid>
+                            
                         </Grid>
                     </Grid>
 
