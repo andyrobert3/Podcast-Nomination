@@ -1,5 +1,4 @@
 import { db } from '../firebase/firebase';
-import isEmpty from '../utils/util';
 import firebase from "firebase/app";
 
 const NUM_SHARDS = 5;
@@ -23,13 +22,23 @@ const createCounter = (ref, num_shards) => {
     return batch.commit();
 }
 
-function incrementCounter(ref) {
+async function incrementCounter(ref) {
     // Select a shard of the counter at random
     const shard_id = Math.floor(Math.random() * NUM_SHARDS).toString();
     const shard_ref = ref.collection('shards').doc(shard_id);
 
     // Update count
-    return shard_ref.update("count", firebase.firestore.FieldValue.increment(1));
+    await shard_ref.update("count", firebase.firestore.FieldValue.increment(1));
+    return shard_id;
+}
+
+async function decrementCounter(ref, shard_id) {
+    const shard_ref = ref.collection('shards').doc(shard_id);
+    const doc = await shard_ref.get();
+    const count = await doc.data();
+
+    if (count > 0)
+        await shard_ref.update("count", firebase.firestore.FieldValue.increment(-1));
 }
 
 function getCount(ref) {
@@ -42,6 +51,33 @@ function getCount(ref) {
 
         return total_count;
     });
+}
+
+const getUserVoteDetails = async (userId, podcastId) => {
+    let docs = await usersVotesRef.where("userId", "==", userId)
+        .where("podcastId", "==", podcastId).get();
+
+    let result = null;
+    
+    await docs.forEach(async doc => {
+        result = await doc.data();
+    });
+    
+    return result;
+} 
+
+const deleteUserVote = async (userId, podcastId) => {
+    let docs = await usersVotesRef.where("userId", "==", userId)
+        .where("podcastId", "==", podcastId).get();
+
+    let shardId = null;
+    
+    await docs.forEach(async doc => {
+        shardId = await doc.data().shardId;
+        await doc.ref.delete();
+    });
+
+    return shardId;
 }
 
 export async function getVotes(podcastId) {
@@ -75,12 +111,13 @@ export async function registerVote(userId, podcastId) {
             await createCounter(podcastsRef.doc(podcastId), NUM_SHARDS);
         }
 
+        const shardId = await incrementCounter(podcastsRef.doc(podcastId));
+
         await usersVotesRef.add({
             userId: userId,
-            podcastId: podcastId
+            podcastId: podcastId,
+            shardId: shardId
         });
-
-        await incrementCounter(podcastsRef.doc(podcastId));
 
         return {
             valid: true
@@ -88,35 +125,19 @@ export async function registerVote(userId, podcastId) {
     }
 }
 
-// function create
-
-export const createCounterHelper = () => createCounter(podcastsRef, NUM_SHARDS);
-
-
-export const getPodcastDetails = async (listenNotesId) => {
-    let doc = await podcastsRef.doc(listenNotesId).get();
-    if (doc.exists) {
-        return doc.data();
-    } else {
-        return {};
-    }
-};
-
-
-export const addLikeToDb = async (listenNotesId) => {
-    let doc = await getPodcastDetails(listenNotesId);
+export const unregisterVote = async (userId, podcastId) => {
+    // const hasVoted = await checkVote(userId, podcastId);
     
-    if (isEmpty(doc)) {
-        return podcastsRef.doc(listenNotesId).set({
-            likes: 1
-        });
+    // if (hasVoted) {
 
+    const shardId = await deleteUserVote(userId, podcastId);
+    if (shardId === null) {
+        alert("Shard Id is null")
     } else {
-        let previousLikes = doc.likes;
-
-        return podcastsRef.doc(listenNotesId).update({
-            likes: previousLikes + 1
-        }); 
+        await decrementCounter(podcastsRef.doc(podcastId), shardId);
     }
-};
+        
+    // } else {
 
+    // }
+};

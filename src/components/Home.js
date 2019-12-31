@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { logout, getVotes, getUserLoginDetails, registerVote, checkVote } from "../actions";
+import { logout, getVotes, getUserLoginDetails, registerVote, checkVote, unregisterVote } from "../actions";
 
 import './styles/podcastList.css';
 
@@ -43,17 +43,7 @@ class Home extends Component {
     return `https://listen-api.listennotes.com/api/v2/search?q=${query}&sort_by_date=0&type=${type}&len_min=0&published_before=1390190241000&published_after=0&language=English&safe_mode=1`
   };
 
-  getLikesFromDb = async id => {
-    // let podcastDetails = await getPodcastDetails(id);
-    
-    // if (isEmpty(podcastDetails)) {
-    //   return 0;
-    // } else {
-    //   return podcastDetails.likes;
-    // }
-
-  };
-
+ 
   hasVoted = (podcastId) => {
     const userDetails = getUserLoginDetails();
     if (userDetails === null) {
@@ -69,6 +59,15 @@ class Home extends Component {
 
     } else {
       return registerVote(userDetails.uid, podcastId);
+    }
+  }
+
+  unVote = async (podcastId) => {
+    const userDetails = await getUserLoginDetails();
+    if (userDetails === null) {
+
+    } else {
+      return unregisterVote(userDetails.uid, podcastId);
     }
   }
 
@@ -121,12 +120,11 @@ class Home extends Component {
   };
 
   render() {
-    const { classes, isLoggingOut, logoutError } = this.props;
-
     return (
       <div style={{border: "thin solid blue"}}>
         <SearchBar logout={this.handleLogout} onClick={this.fetchPodcastDetails}/>
-        {this.state.loading ? <CircularProgress className='LoadingScreen'/> : <PodcastList podcastCardList={this.state.podcastCardList} onVote={this.vote}></PodcastList>}
+        {this.state.loading ? <CircularProgress className='LoadingScreen'/> : <PodcastList podcastCardList={this.state.podcastCardList} 
+            onVote={this.vote} unVote={this.unVote}></PodcastList>}
       </div>
     );
   }
