@@ -1,5 +1,13 @@
 .PodcastList {
-    border: thin solid blue;
+    border: thin solid red;
     display: flex;
     flex-direction: column;
+}
+
+.LoadingScreen {
+
+    left: 50%;
+    top: 50px;
+    position: relative;
+    justify-content: center;
 }

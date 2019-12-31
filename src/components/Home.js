@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { logout, getVotes, getUserLoginDetails, registerVote, checkVote } from "../actions";
 
-import { withStyles } from "@material-ui/styles";
+import './styles/podcastList.css';
 
 import SearchBar from './Search';
 import PodcastList from './PodcastList';
 
-import isEmpty from '../utils/util';
+import { CircularProgress } from "@material-ui/core";
 
 // const styles = () => ({
 //   root: {
@@ -32,7 +32,8 @@ class Home extends Component {
     super(props);
 
     this.state = {
-      podcastCardList: []
+      podcastCardList: [],
+      loading: false
     };
 
 
@@ -83,6 +84,10 @@ class Home extends Component {
       method: 'GET'
     });
 
+    this.setState({
+      loading: true
+    })
+
     if (response.ok) {
       let data = await response.json();
 
@@ -98,9 +103,10 @@ class Home extends Component {
           podcastCardList.push(val);
         })
       );
-      console.log(podcastCardList)
+
       this.setState({
-        podcastCardList: podcastCardList
+        podcastCardList: podcastCardList,
+        loading: false
       });
 
     } else {
@@ -118,9 +124,9 @@ class Home extends Component {
     const { classes, isLoggingOut, logoutError } = this.props;
 
     return (
-      <div>
+      <div style={{border: "thin solid blue"}}>
         <SearchBar logout={this.handleLogout} onClick={this.fetchPodcastDetails}/>
-        <PodcastList podcastCardList={this.state.podcastCardList} onVote={this.vote}></PodcastList>
+        {this.state.loading ? <CircularProgress className='LoadingScreen'/> : <PodcastList podcastCardList={this.state.podcastCardList} onVote={this.vote}></PodcastList>}
       </div>
     );
   }
