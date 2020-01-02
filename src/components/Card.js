@@ -36,6 +36,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function PodcastCard(props) {
     const classes = useStyles();
+
+    const [buttonDisabled, setDisable] = useState(false);
     const [voted, setVoteState] = useState(props.voted);
     const [likes, setLikes] = useState(props.likes);
     const [buttonColor, setColor] = useState(props.voted ? "primary" : "secondary");
@@ -68,16 +70,20 @@ export default function PodcastCard(props) {
                                 </Typography>
                             </Grid>
                             <Grid classes={classes.likes}>
-                                <Fab color={buttonColor} onClick={!voted ? () => {
-                                    props.onVote(props.id);
+                                <Fab color={buttonColor} disabled={buttonDisabled} onClick={!voted ? async () => {
+                                    setDisable(true);
                                     setColor("primary");
                                     setVoteState(!voted);
                                     setLikes(likes => likes + 1);
-                                } : () => {
-                                    props.unVote(props.id);
+
+                                    setDisable(await props.onVote(props.id));
+                                } : async () => {
+                                    setDisable(true);
                                     setVoteState(!voted);
                                     setLikes(likes => likes - 1);
                                     setColor("secondary");
+
+                                    setDisable(await props.unVote(props.id));
                                 }} aria-label="like">
                                     <FavoriteIcon />
                                 </Fab>

@@ -35,10 +35,11 @@ async function incrementCounter(ref) {
 async function decrementCounter(ref, shard_id) {
     const shard_ref = ref.collection('shards').doc(shard_id);
     const doc = await shard_ref.get();
-    const count = await doc.data();
+    const count = await doc.data().count;
 
-    if (count > 0)
+    if (count > 0) {
         await shard_ref.update("count", firebase.firestore.FieldValue.increment(-1));
+    }
 }
 
 function getCount(ref) {
@@ -101,9 +102,7 @@ export async function registerVote(userId, podcastId) {
     const hasVoted = await checkVote(userId, podcastId);
 
     if (hasVoted) {    
-        return {
-            valid: false
-        };
+        return false;
     } else {
         // vote 
         const podcastsExists = await checkPodcastExists(podcastId);
@@ -119,9 +118,7 @@ export async function registerVote(userId, podcastId) {
             shardId: shardId
         });
 
-        return {
-            valid: true
-        }
+        return false;
     }
 }
 
@@ -132,10 +129,15 @@ export const unregisterVote = async (userId, podcastId) => {
 
     const shardId = await deleteUserVote(userId, podcastId);
     if (shardId === null) {
-        alert("Shard Id is null")
+        alert("Shard Id is null");
+        return true;
     } else {
+        alert(shardId)
         await decrementCounter(podcastsRef.doc(podcastId), shardId);
+        return false;
     }
+
+
         
     // } else {
 
