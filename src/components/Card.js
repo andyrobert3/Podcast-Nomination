@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Fab from '@material-ui/core/Fab';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 
@@ -70,23 +71,26 @@ export default function PodcastCard(props) {
                                 </Typography>
                             </Grid>
                             <Grid classes={classes.likes}>
+                            <Tooltip title={voted ? "Unlike" : "Like"} aria-label="like">
                                 <Fab color={buttonColor} disabled={buttonDisabled} onClick={!voted ? async () => {
-                                    setDisable(true);
-                                    setColor("primary");
-                                    setVoteState(!voted);
-                                    setLikes(likes => likes + 1);
+                                        setDisable(true);
+                                        setColor("primary");
+                                        setVoteState(!voted);
+                                        setLikes(likes => likes + 1);
 
-                                    setDisable(await props.onVote(props.id));
-                                } : async () => {
-                                    setDisable(true);
-                                    setVoteState(!voted);
-                                    setLikes(likes => likes - 1);
-                                    setColor("secondary");
+                                        setDisable(await props.onVote(props.id));
+                                    } : async () => {
+                                        setDisable(true);
+                                        setVoteState(!voted);
+                                        setLikes(likes => likes - 1);
+                                        setColor("secondary");
 
-                                    setDisable(await props.unVote(props.id));
-                                }} aria-label="like">
+                                        setDisable(await props.unVote(props.id));
+                                    }} aria-label="like">
                                     <FavoriteIcon />
                                 </Fab>
+                            </Tooltip>
+                              
                                 <Typography variant="subtitle1">{likes} Likes</Typography>
                             </Grid>
                             

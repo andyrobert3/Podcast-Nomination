@@ -5,7 +5,11 @@ import { login } from "../actions";
 import { withStyles } from "@material-ui/styles";
 
 import Avatar from "@material-ui/core/Avatar";
+import Box from '@material-ui/core/Box';
 import Button from "@material-ui/core/Button";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+
 import TextField from "@material-ui/core/TextField";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
@@ -39,6 +43,19 @@ const styles = () => ({
       textAlign: "center"
     }
 });
+
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      <Link color="inherit" href="https://material-ui.com/">
+        Your Website
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
 
 class Login extends Component {
     state = {
@@ -121,6 +138,17 @@ class Login extends Component {
                   Sign In
                 </Button>
               </Paper>
+              <Grid container justify="flex-end">
+                <Grid item >
+                  <Link href="/signup" variant="body2">
+                    {"Don't have an account? Sign Up"}
+                  </Link>
+                </Grid>
+              </Grid>
+              <Box mt={8}>
+                <Copyright/>
+              </Box>
+
             </Container>
           );
         }

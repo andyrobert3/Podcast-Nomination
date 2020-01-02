@@ -132,7 +132,6 @@ export const unregisterVote = async (userId, podcastId) => {
         alert("Shard Id is null");
         return true;
     } else {
-        alert(shardId)
         await decrementCounter(podcastsRef.doc(podcastId), shardId);
         return false;
     }

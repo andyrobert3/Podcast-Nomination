@@ -5,9 +5,8 @@
 }
 
 .LoadingScreen {
-
     left: 50%;
-    top: 50px;
+    top: 150px;
     position: relative;
     justify-content: center;
 }
