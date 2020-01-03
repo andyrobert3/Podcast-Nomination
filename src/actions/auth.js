@@ -113,3 +113,18 @@ export const verifyAuth = () => dispatch => {
             dispatch(verifySuccess());            
         })
 };
+
+export const signup = async (email, password, name) => {
+    let response = {};
+    try {
+        response.error = null;
+        response.data = await myFirebase.auth()
+            .createUserWithEmailAndPassword(email, password);
+
+    } catch (error) {
+        response.data = null;
+        response.error = error;
+    } finally {
+        return response;
+    };
+};

@@ -4,10 +4,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
@@ -134,19 +132,10 @@ export default function SearchBar(props) {
             onClose={handleMobileMenuClose}
         >
             <MenuItem>
-                <IconButton aria-label="show 1 new mail" color="inherit">
-                    <Badge badgeContent={1} color="secondary">
-                        <MailIcon/>
-                    </Badge>
+                <IconButton aria-label="logout" color="inherit" onClick={props.logout}>
+                    <LockIcon/>
                 </IconButton>
-                <p>Messages</p>
-            </MenuItem>
-            <MenuItem>
-                <IconButton aria-label="show 5 new notifications" color="inherit">
-                    <Badge color="secondary">
-                        <NotificationsIcon />
-                    </Badge>
-                </IconButton>
+                <p>Logout</p>
             </MenuItem>
             <MenuItem onClick={handleProfileMenuOpen}>
                 <IconButton
@@ -202,7 +191,7 @@ export default function SearchBar(props) {
                     <div className={classes.grow}/>
                     <div className={classes.sectionDesktop}>        
                         <Tooltip title="Logout" aria-label="logout">
-                            <IconButton aria-label="show 8 new notifications" color="inherit" onClick={props.logout}>
+                            <IconButton aria-label="logout" color="inherit" onClick={props.logout}>
                                 <LockIcon/>
                             </IconButton>
                         </Tooltip>

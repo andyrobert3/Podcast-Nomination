@@ -91,9 +91,7 @@ class Login extends Component {
         
         if (isAuthenticated) {
           return <Redirect to="/" />;
-
         } else {
-
           return (
             <Container component="main" maxWidth="xs">
               <Paper className={classes.paper}>
