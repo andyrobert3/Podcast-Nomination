@@ -54,18 +54,18 @@ function getCount(ref) {
     });
 }
 
-const getUserVoteDetails = async (userId, podcastId) => {
-    let docs = await usersVotesRef.where("userId", "==", userId)
-        .where("podcastId", "==", podcastId).get();
+// const getUserVoteDetails = async (userId, podcastId) => {
+//     let docs = await usersVotesRef.where("userId", "==", userId)
+//         .where("podcastId", "==", podcastId).get();
 
-    let result = null;
+//     let result = null;
     
-    await docs.forEach(async doc => {
-        result = await doc.data();
-    });
+//     await docs.forEach(async doc => {
+//         result = await doc.data();
+//     });
     
-    return result;
-} 
+//     return result;
+// } 
 
 const deleteUserVote = async (userId, podcastId) => {
     let docs = await usersVotesRef.where("userId", "==", userId)
